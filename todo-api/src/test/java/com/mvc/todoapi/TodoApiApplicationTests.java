@@ -42,7 +42,7 @@ class TodoApiApplicationTests {
 		assertEquals("It's Over 9000!!!", todo.getName());
 	}
 	
-//	@Test
+	@Test
 	void testDeleteTodo() throws Exception{
 		
 		assertEquals(204, todoService.deleteTodo("1" ,  "123"));
