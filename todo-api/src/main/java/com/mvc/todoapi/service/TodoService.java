@@ -4,15 +4,18 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.mvc.todoapi.domain.Todo;
-import com.mvc.todoapi.domain.TodoList;
 
 @Service
 public class TodoService {
@@ -58,26 +61,28 @@ public class TodoService {
 	public Todo updateTodo(String todoId, Todo todo, String apiKey) throws Exception{
 		
 		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/" + todoId;
-		
+
+
 		URL url = new URL(reqURL);
 		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("PUT");
 		conn.setRequestProperty("Content-type", "application/json");
+		conn.setRequestProperty("apikey", "123");
 		conn.setDoOutput(true);
 		
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-		StringBuilder sb = new StringBuilder();
-		sb.append("apikey="+apiKey);
-		sb.append("&name="+todo.getName());
-		sb.append("&completed=false");
-		bw.write(sb.toString());
+		
+		JsonObject param = new JsonObject();
+        param.addProperty("name", todo.getName());
+        param.addProperty("completed", todo.isCompleted());
+        bw.write( param.toString());
 		bw.flush();
 		
 		int responseCode = conn.getResponseCode();
 		System.out.println("responseCode : " + responseCode);
 		
-		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
 		String line = "";
 		String result = "";
 		
@@ -93,27 +98,26 @@ public class TodoService {
 	
 	
 	
-	public void deleteTodo(String todoId, String apiKey) throws Exception{
+	public int deleteTodo(String todoId, String apiKey) throws Exception{
 		
-		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/" + todoId;
+		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/1";
 		
 		URL url = new URL(reqURL);
 		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("DELETE");
-		conn.setRequestProperty("Content-type", "application/json");
-		conn.setDoOutput(true);
+		conn.setRequestProperty("Content-Type", "application/json");
+		conn.setRequestProperty("apikey", "123");
 		
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-		StringBuilder sb = new StringBuilder();
-		sb.append("apikey="+apiKey);
-		sb.append("&todoId="+todoId);
-		bw.write(sb.toString());
-		bw.flush();
+		
+		System.out.println(conn.getResponseMessage());
 		
 		int responseCode = conn.getResponseCode();
 		System.out.println("responseCode : " + responseCode);
+		
+		return responseCode;
 	}
+	
 	
 	public Todo createTodo(String todoName, String apiKey) throws Exception{
 		
@@ -124,14 +128,15 @@ public class TodoService {
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("Content-type", "application/json");
+		conn.setRequestProperty("apikey", "123");
 		conn.setDoOutput(true);
 		
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-		StringBuilder sb = new StringBuilder();
-		sb.append("apikey="+apiKey);
-		sb.append("&name="+todoName);
-		sb.append("&completed=false");
-		bw.write(sb.toString());
+		
+		JsonObject param = new JsonObject();
+        param.addProperty("name", todoName);
+        param.addProperty("completed", false);
+        bw.write( param.toString());
 		bw.flush();
 		
 		int responseCode = conn.getResponseCode();
@@ -152,9 +157,9 @@ public class TodoService {
 	}
 	
 	
-	public List<Todo> getListTodo() throws Exception{
+	public List<Todo> getListTodo(int limit , String skip) throws Exception{
 		
-		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos";
+		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos?limit="+limit+"&skip="+skip;
 		
 		URL url = new URL(reqURL);
 		
@@ -177,12 +182,13 @@ public class TodoService {
 		}
 		
 		System.out.println("response body : " + result);
+			
 		
-
-		TodoList todoList = new Gson().fromJson(result, TodoList.class);
+		Type listType = new TypeToken<ArrayList<Todo>>(){}.getType();
+		ArrayList<Todo> todoList = new Gson().fromJson(result, listType); 
+		System.out.println(todoList);
 		
-		
-        return todoList.getTodoList();
+        return todoList;
 	}
 	
 

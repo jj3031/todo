@@ -24,6 +24,9 @@ public class Todo {
 		this.user = user;
 	}
 
+	public Todo() {
+	}
+
 	
 
 }
