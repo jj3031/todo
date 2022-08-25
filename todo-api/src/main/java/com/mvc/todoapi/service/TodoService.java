@@ -55,7 +55,7 @@ public class TodoService {
 	}
 	
 	
-	public Todo updateTodo(String todoId, String apiKey) throws Exception{
+	public Todo updateTodo(String todoId, Todo todo, String apiKey) throws Exception{
 		
 		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/" + todoId;
 		
@@ -69,6 +69,8 @@ public class TodoService {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
 		StringBuilder sb = new StringBuilder();
 		sb.append("apikey="+apiKey);
+		sb.append("&name="+todo.getName());
+		sb.append("&completed=false");
 		bw.write(sb.toString());
 		bw.flush();
 		
@@ -84,7 +86,7 @@ public class TodoService {
 		}
 		System.out.println("response body : " + result);
 		
-		Todo todo = new Gson().fromJson(result, Todo.class);
+		todo = new Gson().fromJson(result, Todo.class);
         
         return todo;
 	}

@@ -33,8 +33,8 @@ public class ApiRestController {
     }
     
     @PutMapping("/updatetodo/{id}")
-    public Todo updateTodo(@PathVariable String todoId, @RequestParam String apikey) throws Exception {
-        return todoService.updateTodo(todoId, apikey);
+    public Todo updateTodo(@PathVariable String todoId, @ModelAttribute("todo") Todo todo, @RequestParam String apikey) throws Exception {
+        return todoService.updateTodo(todoId, todo, apikey);
     }
     
     @DeleteMapping("/deletetodo/{id}")
