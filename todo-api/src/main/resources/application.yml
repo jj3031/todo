@@ -1,0 +1,50 @@
+
+
+server:
+  port: 8080
+
+  tomcat:
+   additional-tld-skip-patterns: "*.jar"
+  servlet:
+    context-path: /
+    encoding:
+      charset: utf-8
+      enabled: true
+    session:
+      timeout: 14400
+  
+      
+mybatis:
+    mapper-locations: 'mybatis/**/*.xml '
+    type-aliases-package: com.mvc.todoapi.domain
+ 
+    
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    
+  thymeleaf:
+      prefix: classpath:templates/
+      suffix: .html
+      mode: HTML
+      
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/forrest?serverTimezone=Asia/Seoul
+    username: cos
+    password: cos1234
+ 
+
+
+      
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+
+  
+
+file:
+  path: C:/imgs/
+
