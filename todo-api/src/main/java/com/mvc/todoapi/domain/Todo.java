@@ -1,5 +1,6 @@
 package com.mvc.todoapi.domain;
 
+
 import lombok.Data;
 
 @Data
@@ -22,5 +23,7 @@ public class Todo {
 		this.updated_at = updated_at;
 		this.user = user;
 	}
+
+	
 
 }
