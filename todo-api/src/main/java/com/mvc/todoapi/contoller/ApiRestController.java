@@ -20,41 +20,43 @@ import lombok.RequiredArgsConstructor;
 
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class ApiRestController {
 
     private final  TodoService todoService;
 
     
-    @GetMapping("/gettodo/{id}")
+    @GetMapping("todos/{id}")
     public Todo getTodo(@PathVariable String todoId) throws Exception {
         return todoService.getTodo(todoId);
     }
     
-    @PutMapping("/updatetodo/{id}")
+    @PutMapping("todos/{id}")
     public Todo updateTodo(@PathVariable String todoId, @ModelAttribute("todo") Todo todo, @RequestParam String apikey) throws Exception {
         return todoService.updateTodo(todoId, todo, apikey);
     }
     
-    @DeleteMapping("/deletetodo/{id}")
+    @DeleteMapping("todos/{id}")
     public String deleteTodo(@PathVariable String todoId, @RequestParam String apikey) throws Exception {
         todoService.deleteTodo(todoId, apikey);
         return "Delete complete";
     }
     
-    @PostMapping("/createtodo/{id}")
+    @PostMapping("todos")
     public Todo createTodo(@ModelAttribute("todo") Todo todo, @RequestParam String apikey) throws Exception {
        
         return  todoService.createTodo(todo.getName(), apikey);
     }
     
-    @GetMapping("/listtodo")
+    @GetMapping("todos")
     public List<Todo> listTodos(@PathVariable String todoId) throws Exception {
-        return todoService.getListTodo();
+    	int limit =0;
+    	String skip = "";
+        return todoService.getListTodo(limit, skip);
     }
     
-    @GetMapping("/temp")
+    @GetMapping("temp")
     public String temp() {
         return "FINAL TEST";
     }
