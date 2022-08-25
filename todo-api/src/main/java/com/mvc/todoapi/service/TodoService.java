@@ -100,14 +100,15 @@ public class TodoService {
 	
 	public int deleteTodo(String todoId, String apiKey) throws Exception{
 		
-		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/1";
+		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/"+todoId;
 		
 		URL url = new URL(reqURL);
 		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("DELETE");
-		conn.setRequestProperty("Content-Type", "application/json");
-		conn.setRequestProperty("apikey", "123");
+//		conn.setRequestProperty("Content-type", "application/json");
+//		conn.setRequestProperty("apikey", "123");
+//		conn.setDoOutput(true);
 		
 		
 		System.out.println(conn.getResponseMessage());
