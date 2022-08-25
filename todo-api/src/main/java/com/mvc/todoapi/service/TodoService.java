@@ -15,9 +15,9 @@ import com.mvc.todoapi.domain.Todo;
 import com.mvc.todoapi.domain.TodoList;
 
 @Service
-public class todoService {
+public class TodoService {
 		
-	public todoService() {
+	public TodoService() {
 		System.out.println(this.getClass());
 	}
 	
@@ -150,9 +150,9 @@ public class todoService {
 	}
 	
 	
-	public List<Todo> getListTodo(String todoId) throws Exception{
+	public List<Todo> getListTodo() throws Exception{
 		
-		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/" + todoId;
+		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos";
 		
 		URL url = new URL(reqURL);
 		
