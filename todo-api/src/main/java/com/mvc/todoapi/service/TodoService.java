@@ -27,12 +27,10 @@ import com.mvc.todoapi.domain.Todo;
 @Service
 public class TodoService {
 	
-	private RestTemplate restTemplate;
 	
 	@Autowired
 	public TodoService() {
 		System.out.println(this.getClass());
-		this.restTemplate = restTemplate;
 	}
 	
 	public Todo getTodo(String todoId) throws Exception{
