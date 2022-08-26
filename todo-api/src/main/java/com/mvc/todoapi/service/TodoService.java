@@ -10,7 +10,14 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -19,9 +26,13 @@ import com.mvc.todoapi.domain.Todo;
 
 @Service
 public class TodoService {
-		
+	
+	private RestTemplate restTemplate;
+	
+	@Autowired
 	public TodoService() {
 		System.out.println(this.getClass());
+		this.restTemplate = restTemplate;
 	}
 	
 	public Todo getTodo(String todoId) throws Exception{
@@ -100,23 +111,25 @@ public class TodoService {
 	
 	public int deleteTodo(String todoId, String apiKey) throws Exception{
 		
-		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/"+todoId;
-		
-		URL url = new URL(reqURL);
-		
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("DELETE");
+		String reqURL = "https://stoplight.io/mocks/dietfriends/todo-api/781080/todos/{id}";
+
+//		URL url = new URL(reqURL);
+//		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//		conn.setRequestMethod("DELETE");
 //		conn.setRequestProperty("Content-type", "application/json");
 //		conn.setRequestProperty("apikey", "123");
 //		conn.setDoOutput(true);
+//		restTemplate.delete(reqURL, params);
 		
 		
-		System.out.println(conn.getResponseMessage());
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+		Integer empId = 1;
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Void> responseEntity = restTemplate.exchange(reqURL, HttpMethod.DELETE, httpEntity, Void.class, empId);
 		
-		int responseCode = conn.getResponseCode();
-		System.out.println("responseCode : " + responseCode);
-		
-		return responseCode;
+		return responseEntity.getStatusCodeValue();
 	}
 	
 	
